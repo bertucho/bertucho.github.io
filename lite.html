@@ -26,12 +26,12 @@
       handoff_with_javascript: async ({ conversationId, transcript }) => {
         Intercom('shutdown');
 
-        await zE('messenger', 'show');
-        await zE('messenger:set', 'ticketFields', {
-          "5610272079775": conversationId,
-          "5610272406687": transcript
-        });
-        await zE('messenger', 'open');
+        zE('messenger', 'show');
+        zE('messenger:set', 'conversationFields', [
+          { id: '5610272079775', value: conversationId },
+          { id: '5610272406687', value: transcript }
+        ]);
+        zE('messenger', 'open');
       }
     };
   </script>
