@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zendesk Lite QA</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 80px auto; padding: 0 20px; }
+    h1 { font-size: 1.4rem; }
+    p { color: #555; line-height: 1.6; }
+    code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>Zendesk Lite QA</h1>
+  <p>Fin Messenger and Zendesk widget are loaded. Open the Fin chat to start a conversation.</p>
+  <p>Handoff to agent will transfer to the Zendesk Messenger widget. Handoff to ticket will create a Zendesk ticket via email.</p>
+  <p>App: <code>l7ft0le4</code> &middot; Zendesk: <code>foo-36610.zendesk.com</code></p>
 
+  <!-- 1. Intercom (Fin) settings with handoff JS -->
+  <script>
+    window.intercomSettings = {
+      app_id: "l7ft0le4",
+      api_base: "https://api-iam.intercom.io",
+
+      handoff_with_javascript: async ({ conversationId, transcript }) => {
+        Intercom('shutdown');
+
+        await zE('messenger', 'show');
+        await zE('messenger:set', 'ticketFields', {
+          "5610272079775": conversationId,
+          "5610272406687": transcript
+        });
+        await zE('messenger', 'open');
+      }
+    };
+  </script>
+
+  <!-- 2. Intercom widget loader -->
+  <script>
+    (function(){
+      var w=window;var ic=w.Intercom;
+      if(typeof ic==="function"){ ic('reattach_activator'); ic('update', w.intercomSettings); }
+      else {
+        var d=document; var i=function(){ i.c(arguments); }; i.q=[];
+        i.c=function(args){ i.q.push(args); }; w.Intercom=i;
+        var l=function(){
+          var s=d.createElement('script'); s.type='text/javascript'; s.async=true;
+          s.src='https://widget.intercom.io/widget/l7ft0le4';
+          var x=d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s,x);
+        };
+        if(document.readyState==='complete'){ l(); }
+        else if(w.attachEvent){ w.attachEvent('onload',l); }
+        else { w.addEventListener('load',l,false); }
+      }
+    })();
+  </script>
+
+  <!-- 3. Zendesk widget -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=dbd1a9b5-ece6-4c40-bc96-e0e2329f7509"></script>
+
+  <!-- 4. Hide Zendesk until handoff -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      zE('messenger', 'hide');
+    });
+  </script>
+</body>
+</html>
