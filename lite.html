@@ -24,6 +24,10 @@
       api_base: "https://api-iam.intercom.io",
 
       handoff_with_javascript: async ({ conversationId, transcript }) => {
+        console.log('Handoff triggered:', { conversationId, transcript });
+        console.log('conversationId type:', typeof conversationId);
+        console.log('transcript type:', typeof transcript);
+
         Intercom('shutdown');
 
         zE('messenger', 'show');
