@@ -28,8 +28,8 @@
 
         zE('messenger', 'show');
         zE('messenger:set', 'conversationFields', [
-          { id: '5610272079775', value: conversationId },
-          { id: '5610272406687', value: transcript }
+          { id: '5610272079775', value: String(conversationId) },
+          { id: '5610272406687', value: String(transcript) }
         ]);
         zE('messenger', 'open');
       }
